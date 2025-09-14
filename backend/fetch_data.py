@@ -26,7 +26,7 @@ def fetch_news(company_name):
             q=company_name,
             language='en',
             sort_by='relevancy',
-            page_size=20  # Limit to 20 articles
+            page_size=100 
         )
 
         # 4. Check the status of the API response

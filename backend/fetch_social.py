@@ -20,7 +20,7 @@ def fetch_twitter_data(query):
     
     # Initialize the client with your Bearer Token
     client = tweepy.Client(bearer_token=TWITTER_BEARER_TOKEN)
-
+    
     try:
         if query.startswith('@'):
             handle = query.lstrip('@')
@@ -32,7 +32,7 @@ def fetch_twitter_data(query):
             user_id = user_response.data.id
             
             # Step 2: Use the user ID to fetch their recent tweets
-            tweets_response = client.get_users_tweets(id=user_id, max_results=20)
+            tweets_response = client.get_users_tweets(id=user_id, max_results=100)
             tweets = tweets_response.data or []
             
             return [{
@@ -43,7 +43,8 @@ def fetch_twitter_data(query):
             } for tweet in tweets]
         else:
             # For general searches, use the recent search endpoint
-            search_response = client.search_recent_tweets(query=query, max_results=1)
+            # --- CHANGED: Increased max_results from 1 to 100 ---
+            search_response = client.search_recent_tweets(query=query, max_results=100)
             tweets = search_response.data or []
 
             return [{
@@ -99,8 +100,9 @@ def fetch_youtube_data(query):
         channel_response = youtube.channels().list(part='contentDetails', id=channel_id).execute()
         uploads_playlist_id = channel_response['items'][0]['contentDetails']['relatedPlaylists']['uploads']
 
-        # Fetch the 10 most recent videos from that playlist
-        playlist_response = youtube.playlistItems().list(playlistId=uploads_playlist_id, part='snippet', maxResults=10).execute()
+        # Fetch the most recent videos from that playlist
+        # --- CHANGED: Increased maxResults from 10 to 50 ---
+        playlist_response = youtube.playlistItems().list(playlistId=uploads_playlist_id, part='snippet', maxResults=50).execute()
         
         return [{
             'source': 'YouTube',
