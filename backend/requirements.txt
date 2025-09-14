@@ -1,0 +1,7 @@
+flask
+requests
+beautifulsoup4
+openai
+python-dotenv
+textblob
+reportlab
